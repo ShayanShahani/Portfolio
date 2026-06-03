@@ -1,0 +1,101 @@
+# Dependencies
+
+/node_modules
+.pnp
+.pnp.js
+
+# Next.js
+
+/.next/
+/out/
+
+# Build output
+
+/build
+/dist
+
+# Environment variables (NEVER COMMIT THESE)
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Logs
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# Vercel
+
+.vercel
+
+# Netlify
+
+.netlify
+
+# Turborepo
+
+.turbo
+
+# Coverage
+
+coverage/
+
+# Cache
+
+.cache/
+.parcel-cache/
+
+# TypeScript
+
+*.tsbuildinfo
+
+# IDEs
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+.idea/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+
+tmp/
+temp/
+
+# Local database files
+
+*.sqlite
+*.sqlite3
+
+# Certificates & keys
+
+*.pem
+*.key
+*.crt
+*.p12
+
+# Archives
+
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Misc
+
+.next-env.d.ts

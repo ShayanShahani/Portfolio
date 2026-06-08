@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { AppWindow } from "@/types"
+import { useState, useEffect } from "react";
+import type { AppWindow } from "@/types";
 
 // Same apps as dock, except launchpad itself
 const launchpadApps = [
@@ -9,36 +9,66 @@ const launchpadApps = [
   { id: "mail", title: "Mail", icon: "/mail.png", component: "Mail" },
   { id: "vscode", title: "VS Code", icon: "/vscode.png", component: "VSCode" },
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
-  { id: "facetime", title: "FaceTime", icon: "/facetime.png", component: "FaceTime" },
-  { id: "terminal", title: "Terminal", icon: "/terminal.png", component: "Terminal" },
+  { id: "photos", title: "Photos", icon: "/photos.png", component: "Photos" },
+  {
+    id: "facetime",
+    title: "FaceTime",
+    icon: "/facetime.png",
+    component: "FaceTime",
+  },
+  {
+    id: "terminal",
+    title: "Terminal",
+    icon: "/terminal.png",
+    component: "Terminal",
+  },
   { id: "github", title: "GitHub", icon: "/github.png", component: "GitHub" },
-  { id: "youtube", title: "YouTube", icon: "/youtube.png", component: "YouTube" },
-  { id: "spotify", title: "Spotify", icon: "/spotify.png", component: "Spotify" },
+  {
+    id: "youtube",
+    title: "YouTube",
+    icon: "/youtube.png",
+    component: "YouTube",
+  },
+  {
+    id: "spotify",
+    title: "Spotify",
+    icon: "/spotify.png",
+    component: "Spotify",
+  },
   { id: "snake", title: "Snake", icon: "/snake.png", component: "Snake" },
-  { id: "weather", title: "Weather", icon: "/weather.png", component: "Weather" },
-]
+  {
+    id: "weather",
+    title: "Weather",
+    icon: "/weather.png",
+    component: "Weather",
+  },
+];
 
 interface LaunchpadProps {
-  onAppClick: (app: AppWindow) => void
-  onClose: () => void
+  onAppClick: (app: AppWindow) => void;
+  onClose: () => void;
 }
 
 // Improve Launchpad appearance
 export default function Launchpad({ onAppClick, onClose }: LaunchpadProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filteredApps, setFilteredApps] = useState(launchpadApps)
-  const [isVisible, setIsVisible] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredApps, setFilteredApps] = useState(launchpadApps);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Animation effect
-    setIsVisible(true)
+    setIsVisible(true);
 
     if (searchTerm) {
-      setFilteredApps(launchpadApps.filter((app) => app.title.toLowerCase().includes(searchTerm.toLowerCase())))
+      setFilteredApps(
+        launchpadApps.filter((app) =>
+          app.title.toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
+      );
     } else {
-      setFilteredApps(launchpadApps)
+      setFilteredApps(launchpadApps);
     }
-  }, [searchTerm])
+  }, [searchTerm]);
 
   const handleAppClick = (app: (typeof launchpadApps)[0]) => {
     onAppClick({
@@ -47,14 +77,14 @@ export default function Launchpad({ onAppClick, onClose }: LaunchpadProps) {
       component: app.component,
       position: { x: Math.random() * 200 + 100, y: Math.random() * 100 + 50 },
       size: { width: 800, height: 600 },
-    })
-    onClose()
-  }
+    });
+    onClose();
+  };
 
   const handleClose = () => {
-    setIsVisible(false)
-    setTimeout(onClose, 300) // Wait for animation to complete
-  }
+    setIsVisible(false);
+    setTimeout(onClose, 300); // Wait for animation to complete
+  };
 
   return (
     <div
@@ -99,13 +129,19 @@ export default function Launchpad({ onAppClick, onClose }: LaunchpadProps) {
               onClick={() => handleAppClick(app)}
             >
               <div className="w-16 h-16 flex items-center justify-center mb-2 rounded-xl group-hover:bg-white/20 transition-colors">
-                <img src={app.icon || "/placeholder.svg"} alt={app.title} className="w-12 h-12 object-contain" />
+                <img
+                  src={app.icon || "/placeholder.svg"}
+                  alt={app.title}
+                  className="w-12 h-12 object-contain"
+                />
               </div>
-              <span className="text-white text-sm text-center">{app.title}</span>
+              <span className="text-white text-sm text-center">
+                {app.title}
+              </span>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

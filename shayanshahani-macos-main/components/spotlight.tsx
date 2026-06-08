@@ -8,6 +8,7 @@ const spotlightApps = [
   { id: "mail", title: "Mail", icon: "/mail.png", component: "Mail" },
   { id: "vscode", title: "VS Code", icon: "/vscode.png", component: "VSCode" },
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
+  { id: "photos", title: "Photos", icon: "/photos.png", component: "Photos" },
   { id: "facetime", title: "FaceTime", icon: "/facetime.png", component: "FaceTime" },
   { id: "terminal", title: "Terminal", icon: "/terminal.png", component: "Terminal" },
   { id: "github", title: "GitHub", icon: "/github.png", component: "GitHub" },

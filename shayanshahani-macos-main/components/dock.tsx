@@ -21,6 +21,12 @@ const dockApps = [
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
   { id: "photos", title: "Photos", icon: "/photos.png", component: "Photos" },
   {
+    id: "contacts",
+    title: "Contacts",
+    icon: "/contacts.png",
+    component: "Contacts",
+  },
+  {
     id: "facetime",
     title: "FaceTime",
     icon: "/facetime.png",

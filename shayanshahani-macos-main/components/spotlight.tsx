@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import type { AppWindow } from "@/types"
+import { useState, useEffect, useRef } from "react";
+import type { AppWindow } from "@/types";
 
 const spotlightApps = [
   { id: "safari", title: "Safari", icon: "/safari.png", component: "Safari" },
@@ -9,59 +9,94 @@ const spotlightApps = [
   { id: "vscode", title: "VS Code", icon: "/vscode.png", component: "VSCode" },
   { id: "notes", title: "Notes", icon: "/notes.png", component: "Notes" },
   { id: "photos", title: "Photos", icon: "/photos.png", component: "Photos" },
-  { id: "facetime", title: "FaceTime", icon: "/facetime.png", component: "FaceTime" },
-  { id: "terminal", title: "Terminal", icon: "/terminal.png", component: "Terminal" },
+  {
+    id: "contacts",
+    title: "Contacts",
+    icon: "/contacts.png",
+    component: "Contacts",
+  },
+  {
+    id: "facetime",
+    title: "FaceTime",
+    icon: "/facetime.png",
+    component: "FaceTime",
+  },
+  {
+    id: "terminal",
+    title: "Terminal",
+    icon: "/terminal.png",
+    component: "Terminal",
+  },
   { id: "github", title: "GitHub", icon: "/github.png", component: "GitHub" },
-  { id: "youtube", title: "YouTube", icon: "/youtube.png", component: "YouTube" },
-  { id: "spotify", title: "Spotify", icon: "/spotify.png", component: "Spotify" },
+  {
+    id: "youtube",
+    title: "YouTube",
+    icon: "/youtube.png",
+    component: "YouTube",
+  },
+  {
+    id: "spotify",
+    title: "Spotify",
+    icon: "/spotify.png",
+    component: "Spotify",
+  },
   { id: "snake", title: "Snake", icon: "/snake.png", component: "Snake" },
-  { id: "weather", title: "Weather", icon: "/weather.png", component: "Weather" },
-]
+  {
+    id: "weather",
+    title: "Weather",
+    icon: "/weather.png",
+    component: "Weather",
+  },
+];
 
 interface SpotlightProps {
-  onClose: () => void
-  onAppClick: (app: AppWindow) => void
+  onClose: () => void;
+  onAppClick: (app: AppWindow) => void;
 }
 
 export default function Spotlight({ onClose, onAppClick }: SpotlightProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filteredApps, setFilteredApps] = useState(spotlightApps)
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredApps, setFilteredApps] = useState(spotlightApps);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Focus the input when spotlight opens
-    inputRef.current?.focus()
+    inputRef.current?.focus();
 
     // Handle escape key to close
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose()
+        onClose();
       } else if (e.key === "ArrowDown") {
-        setSelectedIndex((prev) => (prev < filteredApps.length - 1 ? prev + 1 : prev))
-        e.preventDefault()
+        setSelectedIndex((prev) =>
+          prev < filteredApps.length - 1 ? prev + 1 : prev,
+        );
+        e.preventDefault();
       } else if (e.key === "ArrowUp") {
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev))
-        e.preventDefault()
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        e.preventDefault();
       } else if (e.key === "Enter" && filteredApps.length > 0) {
-        handleAppClick(filteredApps[selectedIndex])
-        e.preventDefault()
+        handleAppClick(filteredApps[selectedIndex]);
+        e.preventDefault();
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [filteredApps, selectedIndex])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [filteredApps, selectedIndex]);
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = spotlightApps.filter((app) => app.title.toLowerCase().includes(searchTerm.toLowerCase()))
-      setFilteredApps(filtered)
-      setSelectedIndex(0) // Reset selection when search changes
+      const filtered = spotlightApps.filter((app) =>
+        app.title.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setFilteredApps(filtered);
+      setSelectedIndex(0); // Reset selection when search changes
     } else {
-      setFilteredApps(spotlightApps)
+      setFilteredApps(spotlightApps);
     }
-  }, [searchTerm])
+  }, [searchTerm]);
 
   const handleAppClick = (app: (typeof spotlightApps)[0]) => {
     onAppClick({
@@ -70,12 +105,15 @@ export default function Spotlight({ onClose, onAppClick }: SpotlightProps) {
       component: app.component,
       position: { x: Math.random() * 200 + 100, y: Math.random() * 100 + 50 },
       size: { width: 800, height: 600 },
-    })
-    onClose()
-  }
+    });
+    onClose();
+  };
 
   return (
-    <div className="fixed inset-0 bg-transparent z-40 flex items-center justify-center" onClick={onClose}>
+    <div
+      className="fixed inset-0 bg-transparent z-40 flex items-center justify-center"
+      onClick={onClose}
+    >
       <div
         className="w-full max-w-2xl bg-gray-800/80 backdrop-blur-xl rounded-xl overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
@@ -117,7 +155,11 @@ export default function Spotlight({ onClose, onAppClick }: SpotlightProps) {
                 onMouseEnter={() => setSelectedIndex(index)}
               >
                 <div className="w-8 h-8 flex items-center justify-center mr-3">
-                  <img src={app.icon || "/placeholder.svg"} alt={app.title} className="w-6 h-6 object-contain" />
+                  <img
+                    src={app.icon || "/placeholder.svg"}
+                    alt={app.title}
+                    className="w-6 h-6 object-contain"
+                  />
                 </div>
                 <span className="text-white">{app.title}</span>
               </div>
@@ -126,5 +168,5 @@ export default function Spotlight({ onClose, onAppClick }: SpotlightProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

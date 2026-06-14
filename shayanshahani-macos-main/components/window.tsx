@@ -21,7 +21,7 @@ import Weather from "@/components/apps/weather";
 
 const componentMap: Record<
   string,
-  React.ComponentType<{ isDarkMode?: boolean }>
+  React.ComponentType<{ isDarkMode?: boolean; onClose?: () => void }>
 > = {
   Notes,
   Photos,
@@ -270,7 +270,7 @@ export default function Window({
       {/* Window content */}
       <div className={`${contentBgClass} h-[calc(100%-2rem)] overflow-auto`}>
         {AppComponent ? (
-          <AppComponent isDarkMode={isDarkMode} />
+          <AppComponent isDarkMode={isDarkMode} onClose={onClose} />
         ) : (
           <div className="p-4">Content not available</div>
         )}

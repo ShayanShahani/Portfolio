@@ -48,6 +48,12 @@ const launchpadApps = [
     icon: "/weather.png",
     component: "Weather",
   },
+  {
+    id: "settings",
+    title: "Settings",
+    icon: "/settings.png",
+    component: "Settings",
+  },
 ];
 
 interface LaunchpadProps {

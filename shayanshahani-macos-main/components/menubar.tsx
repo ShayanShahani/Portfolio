@@ -102,6 +102,16 @@ export default function Menubar({
       setWifiEnabled(savedWifi === "true");
     }
 
+    const handleWifiChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ wifiEnabled: boolean }>;
+
+      if (typeof customEvent.detail?.wifiEnabled === "boolean") {
+        setWifiEnabled(customEvent.detail.wifiEnabled);
+      }
+    };
+
+    window.addEventListener("portfolio:wifi-change", handleWifiChange);
+
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target;
 
@@ -127,6 +137,7 @@ export default function Menubar({
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("portfolio:wifi-change", handleWifiChange);
 
       if (batteryManager && handleBatteryChange) {
         batteryManager.removeEventListener("levelchange", handleBatteryChange);
@@ -149,6 +160,12 @@ export default function Menubar({
 
     setWifiEnabled(newState);
     localStorage.setItem("wifiEnabled", newState.toString());
+
+    window.dispatchEvent(
+      new CustomEvent("portfolio:wifi-change", {
+        detail: { wifiEnabled: newState },
+      }),
+    );
   };
 
   const toggleWifiPopup = (event: React.MouseEvent) => {
@@ -289,7 +306,13 @@ export default function Menubar({
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-5 h-5"
+              className={`w-5 h-5 transition-colors ${
+                wifiEnabled
+                  ? ""
+                  : isDarkMode
+                    ? "text-zinc-500"
+                    : "text-zinc-400"
+              }`}
             >
               {wifiEnabled ? (
                 <>

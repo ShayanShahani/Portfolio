@@ -150,6 +150,16 @@ export default function Desktop({
       ? openWindows.find((window) => window.id === activeWindowId) || null
       : null;
 
+  const openSettingsApp = () => {
+    openApp({
+      id: "settings",
+      title: "Settings",
+      component: "Settings",
+      position: { x: 160, y: 70 },
+      size: { width: 900, height: 640 },
+    });
+  };
+
   return (
     <div className="relative">
       <div
@@ -169,6 +179,7 @@ export default function Desktop({
           onRestart={onRestart}
           onSpotlightClick={toggleSpotlight}
           onControlCenterClick={toggleControlCenter}
+          onOpenSettingsApp={openSettingsApp}
           isDarkMode={isDarkMode}
           activeWindow={activeWindow}
         />
@@ -210,6 +221,7 @@ export default function Desktop({
           <Spotlight
             onClose={() => setShowSpotlight(false)}
             onAppClick={openApp}
+            isDarkMode={isDarkMode}
           />
         )}
 

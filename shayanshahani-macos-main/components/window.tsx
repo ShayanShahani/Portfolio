@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useEffect, useRef, useState } from "react";
-import { X, Minus, ArrowRightIcon as ArrowsMaximize } from "lucide-react";
+import { Minus, X } from "lucide-react";
 import type { AppWindow } from "@/types";
 import Notes from "@/components/apps/notes";
 import Photos from "@/components/apps/photos";
@@ -260,33 +260,30 @@ export default function Window({
         className={`h-8 flex items-center px-3 ${titleBarClass}`}
         onMouseDown={handleTitleBarMouseDown}
       >
-        <div className="window-controls flex items-center space-x-2 mr-4">
-          <button
-            type="button"
-            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center"
+        <div className="window-controls group flex items-center space-x-2 mr-4">
+          <TrafficLightButton
+            colorClass="bg-red-500 hover:bg-red-500"
+            icon={<X className="h-2.5 w-2.5 stroke-[3]" />}
+            iconClass="text-red-950"
             onClick={onClose}
-            aria-label="Close window"
-          >
-            <X className="w-2 h-2 text-red-800 opacity-0 hover:opacity-100" />
-          </button>
+            label="Close window"
+          />
 
-          <button
-            type="button"
-            className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center"
+          <TrafficLightButton
+            colorClass="bg-yellow-500 hover:bg-yellow-500"
+            icon={<Minus className="h-2.5 w-2.5 stroke-[3]" />}
+            iconClass="text-yellow-950"
             onClick={handleMinimize}
-            aria-label="Minimize window"
-          >
-            <Minus className="w-2 h-2 text-yellow-800 opacity-0 hover:opacity-100" />
-          </button>
+            label="Minimize window"
+          />
 
-          <button
-            type="button"
-            className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center"
+          <TrafficLightButton
+            colorClass="bg-green-500 hover:bg-green-500"
+            icon={<MacMaximizeIcon />}
+            iconClass="text-green-950"
             onClick={toggleMaximize}
-            aria-label={isMaximized ? "Restore window" : "Maximize window"}
-          >
-            <ArrowsMaximize className="w-2 h-2 text-green-800 opacity-0 hover:opacity-100" />
-          </button>
+            label={isMaximized ? "Restore window" : "Maximize window"}
+          />
         </div>
 
         <div
@@ -350,5 +347,47 @@ export default function Window({
         </>
       )}
     </div>
+  );
+}
+
+function TrafficLightButton({
+  colorClass,
+  icon,
+  iconClass,
+  onClick,
+  label,
+}: {
+  colorClass: string;
+  icon: React.ReactNode;
+  iconClass: string;
+  onClick?: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      className={`flex h-3.5 w-3.5 items-center justify-center rounded-full ${colorClass}`}
+      onClick={onClick}
+      aria-label={label}
+    >
+      <span
+        className={`flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100 ${iconClass}`}
+      >
+        {icon}
+      </span>
+    </button>
+  );
+}
+
+function MacMaximizeIcon() {
+  return (
+    <svg
+      viewBox="0 0 10 10"
+      className="h-2.5 w-2.5 fill-current"
+      aria-hidden="true"
+    >
+      <path d="M2 1h5.2L1 7.2V2a1 1 0 0 1 1-1Z" />
+      <path d="M8 9H2.8L9 2.8V8a1 1 0 0 1-1 1Z" />
+    </svg>
   );
 }

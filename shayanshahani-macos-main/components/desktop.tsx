@@ -35,6 +35,7 @@ export default function Desktop({
 }: DesktopProps) {
   const [time, setTime] = useState(new Date());
   const [openWindows, setOpenWindows] = useState<AppWindow[]>([]);
+  const [minimizedWindowIds, setMinimizedWindowIds] = useState<string[]>([]);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const [showLaunchpad, setShowLaunchpad] = useState(false);
   const [showControlCenter, setShowControlCenter] = useState(false);
@@ -61,12 +62,29 @@ export default function Desktop({
   }, [initialBrightness]);
 
   const openApp = (app: AppWindow) => {
-    const isOpen = openWindows.some((window) => window.id === app.id);
+    const existingWindow = openWindows.find(
+      (windowItem) => windowItem.id === app.id,
+    );
 
-    if (!isOpen) {
-      setOpenWindows((prev) => [...prev, app]);
+    if (existingWindow) {
+      setMinimizedWindowIds((currentIds) =>
+        currentIds.filter((windowId) => windowId !== app.id),
+      );
+
+      setActiveWindowId(app.id);
+
+      if (showLaunchpad) {
+        setShowLaunchpad(false);
+      }
+
+      if (showSpotlight) {
+        setShowSpotlight(false);
+      }
+
+      return;
     }
 
+    setOpenWindows((currentWindows) => [...currentWindows, app]);
     setActiveWindowId(app.id);
 
     if (showLaunchpad) {
@@ -79,13 +97,41 @@ export default function Desktop({
   };
 
   const closeWindow = (id: string) => {
-    const remainingWindows = openWindows.filter((window) => window.id !== id);
+    setOpenWindows((currentWindows) => {
+      const remainingWindows = currentWindows.filter(
+        (windowItem) => windowItem.id !== id,
+      );
 
-    setOpenWindows(remainingWindows);
+      if (activeWindowId === id) {
+        const lastVisibleWindow = remainingWindows
+          .filter((windowItem) => !minimizedWindowIds.includes(windowItem.id))
+          .at(-1);
+
+        setActiveWindowId(lastVisibleWindow?.id ?? null);
+      }
+
+      return remainingWindows;
+    });
+
+    setMinimizedWindowIds((currentIds) =>
+      currentIds.filter((windowId) => windowId !== id),
+    );
+  };
+
+  const minimizeWindow = (id: string) => {
+    setMinimizedWindowIds((currentIds) =>
+      currentIds.includes(id) ? currentIds : [...currentIds, id],
+    );
 
     if (activeWindowId === id) {
-      const lastWindow = remainingWindows[remainingWindows.length - 1];
-      setActiveWindowId(lastWindow ? lastWindow.id : null);
+      const nextActiveWindow = openWindows
+        .filter(
+          (windowItem) =>
+            windowItem.id !== id && !minimizedWindowIds.includes(windowItem.id),
+        )
+        .at(-1);
+
+      setActiveWindowId(nextActiveWindow?.id ?? null);
     }
   };
 
@@ -147,8 +193,16 @@ export default function Desktop({
 
   const activeWindow =
     activeWindowId !== null
-      ? openWindows.find((window) => window.id === activeWindowId) || null
+      ? openWindows.find(
+          (windowItem) =>
+            windowItem.id === activeWindowId &&
+            !minimizedWindowIds.includes(windowItem.id),
+        ) || null
       : null;
+
+  const visibleWindows = openWindows.filter(
+    (windowItem) => !minimizedWindowIds.includes(windowItem.id),
+  );
 
   const openSettingsApp = () => {
     openApp({
@@ -185,12 +239,13 @@ export default function Desktop({
         />
 
         <div className="absolute inset-0 pt-6 pb-16">
-          {openWindows.map((window) => (
+          {visibleWindows.map((window) => (
             <Window
               key={window.id}
               window={window}
               isActive={activeWindowId === window.id}
               onClose={() => closeWindow(window.id)}
+              onMinimize={() => minimizeWindow(window.id)}
               onFocus={() => setActiveWindow(window.id)}
               isDarkMode={isDarkMode}
               onToggleDarkMode={toggleDarkMode}

@@ -49,6 +49,7 @@ interface WindowProps {
   window: AppWindow;
   isActive: boolean;
   onClose: () => void;
+  onMinimize: () => void;
   onFocus: () => void;
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
@@ -56,10 +57,23 @@ interface WindowProps {
   onBrightnessChange: (value: number) => void;
 }
 
+const MIN_WIDTH = 300;
+const MIN_HEIGHT = 200;
+const MENUBAR_HEIGHT = 26;
+const BOTTOM_SAFE_AREA = 12;
+const WINDOW_ANIMATION_MS = 180;
+
+type AnimationState = "opening" | "idle" | "minimizing" | "closing";
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
 export default function Window({
   window: appWindow,
   isActive,
   onClose,
+  onMinimize,
   onFocus,
   isDarkMode,
   onToggleDarkMode,
@@ -77,22 +91,55 @@ export default function Window({
   });
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);
-  const [resizeStartPos, setResizeStartPos] = useState({ x: 0, y: 0 });
-  const [resizeStartSize, setResizeStartSize] = useState({
-    width: 0,
-    height: 0,
+  const [resizeStartMouse, setResizeStartMouse] = useState({ x: 0, y: 0 });
+  const [resizeStartFrame, setResizeStartFrame] = useState({
+    x: appWindow.position.x,
+    y: appWindow.position.y,
+    width: appWindow.size.width,
+    height: appWindow.size.height,
   });
+  const [animationState, setAnimationState] =
+    useState<AnimationState>("opening");
 
   const windowRef = useRef<HTMLDivElement>(null);
+  const animationTimeoutRef = useRef<number | null>(null);
 
   const AppComponent = componentMap[appWindow.component];
+  const isAnimating =
+    animationState === "opening" ||
+    animationState === "minimizing" ||
+    animationState === "closing";
+
+  useEffect(() => {
+    const animationFrame = window.requestAnimationFrame(() => {
+      setAnimationState("idle");
+    });
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+
+      if (animationTimeoutRef.current !== null) {
+        window.clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      const viewportWidth = globalThis.window.innerWidth;
+      const viewportHeight = globalThis.window.innerHeight - BOTTOM_SAFE_AREA;
+
       if (isDragging) {
+        const maxX = viewportWidth - size.width;
+        const maxY = viewportHeight - size.height;
+
         setPosition({
-          x: event.clientX - dragOffset.x,
-          y: event.clientY - dragOffset.y,
+          x: clamp(event.clientX - dragOffset.x, 0, Math.max(0, maxX)),
+          y: clamp(
+            event.clientY - dragOffset.y,
+            MENUBAR_HEIGHT,
+            Math.max(MENUBAR_HEIGHT, maxY),
+          ),
         });
 
         return;
@@ -101,48 +148,56 @@ export default function Window({
       if (isResizing && resizeDirection) {
         event.preventDefault();
 
-        const dx = event.clientX - resizeStartPos.x;
-        const dy = event.clientY - resizeStartPos.y;
+        const dx = event.clientX - resizeStartMouse.x;
+        const dy = event.clientY - resizeStartMouse.y;
 
-        let newWidth = resizeStartSize.width;
-        let newHeight = resizeStartSize.height;
-        let newX = position.x;
-        let newY = position.y;
+        const startLeft = resizeStartFrame.x;
+        const startTop = resizeStartFrame.y;
+        const startRight = resizeStartFrame.x + resizeStartFrame.width;
+        const startBottom = resizeStartFrame.y + resizeStartFrame.height;
 
-        const minWidth = 300;
-        const minHeight = 200;
+        let nextLeft = startLeft;
+        let nextTop = startTop;
+        let nextRight = startRight;
+        let nextBottom = startBottom;
 
         if (resizeDirection.includes("e")) {
-          newWidth = Math.max(minWidth, resizeStartSize.width + dx);
+          nextRight = clamp(
+            startRight + dx,
+            startLeft + MIN_WIDTH,
+            viewportWidth,
+          );
         }
 
         if (resizeDirection.includes("s")) {
-          newHeight = Math.max(minHeight, resizeStartSize.height + dy);
+          nextBottom = clamp(
+            startBottom + dy,
+            startTop + MIN_HEIGHT,
+            viewportHeight,
+          );
         }
 
         if (resizeDirection.includes("w")) {
-          const proposedWidth = resizeStartSize.width - dx;
-
-          if (proposedWidth >= minWidth) {
-            newWidth = proposedWidth;
-            newX = position.x + dx;
-          }
+          nextLeft = clamp(startLeft + dx, 0, startRight - MIN_WIDTH);
         }
 
         if (resizeDirection.includes("n")) {
-          const proposedHeight = resizeStartSize.height - dy;
-
-          if (proposedHeight >= minHeight) {
-            newHeight = proposedHeight;
-            newY = position.y + dy;
-          }
+          nextTop = clamp(
+            startTop + dy,
+            MENUBAR_HEIGHT,
+            startBottom - MIN_HEIGHT,
+          );
         }
 
-        setSize({ width: newWidth, height: newHeight });
+        setPosition({
+          x: nextLeft,
+          y: nextTop,
+        });
 
-        if (resizeDirection.includes("w") || resizeDirection.includes("n")) {
-          setPosition({ x: newX, y: newY });
-        }
+        setSize({
+          width: nextRight - nextLeft,
+          height: nextBottom - nextTop,
+        });
       }
     };
 
@@ -164,15 +219,15 @@ export default function Window({
   }, [
     isDragging,
     dragOffset,
+    size,
     isResizing,
     resizeDirection,
-    resizeStartPos,
-    resizeStartSize,
-    position,
+    resizeStartMouse,
+    resizeStartFrame,
   ]);
 
   const handleTitleBarMouseDown = (event: React.MouseEvent) => {
-    if (isMaximized) return;
+    if (isMaximized || isAnimating) return;
 
     if ((event.target as HTMLElement).closest(".window-controls")) {
       return;
@@ -194,13 +249,17 @@ export default function Window({
     event.preventDefault();
     event.stopPropagation();
 
+    if (isMaximized || isAnimating) return;
+
     setIsResizing(true);
     setResizeDirection(direction);
-    setResizeStartPos({
+    setResizeStartMouse({
       x: event.clientX,
       y: event.clientY,
     });
-    setResizeStartSize({
+    setResizeStartFrame({
+      x: position.x,
+      y: position.y,
       width: size.width,
       height: size.height,
     });
@@ -208,16 +267,38 @@ export default function Window({
     onFocus();
   };
 
+  const handleClose = () => {
+    if (animationState !== "idle") return;
+
+    setAnimationState("closing");
+
+    animationTimeoutRef.current = window.setTimeout(() => {
+      onClose();
+    }, WINDOW_ANIMATION_MS);
+  };
+
+  const handleMinimize = () => {
+    if (animationState !== "idle") return;
+
+    setAnimationState("minimizing");
+
+    animationTimeoutRef.current = window.setTimeout(() => {
+      onMinimize();
+    }, WINDOW_ANIMATION_MS);
+  };
+
   const toggleMaximize = () => {
+    if (isAnimating) return;
+
     if (isMaximized) {
       setPosition(preMaximizeState.position);
       setSize(preMaximizeState.size);
     } else {
       setPreMaximizeState({ position, size });
 
-      const availableHeight = globalThis.window.innerHeight - 26;
+      const availableHeight = globalThis.window.innerHeight - MENUBAR_HEIGHT;
 
-      setPosition({ x: 0, y: 26 });
+      setPosition({ x: 0, y: MENUBAR_HEIGHT });
       setSize({
         width: globalThis.window.innerWidth,
         height: availableHeight - 70,
@@ -225,10 +306,6 @@ export default function Window({
     }
 
     setIsMaximized((currentValue) => !currentValue);
-  };
-
-  const handleMinimize = () => {
-    onClose();
   };
 
   const titleBarClass = isDarkMode
@@ -242,10 +319,19 @@ export default function Window({
   const contentBgClass = isDarkMode ? "bg-gray-900" : "bg-white";
   const textClass = isDarkMode ? "text-white" : "text-gray-800";
 
+  const animationClass =
+    animationState === "idle"
+      ? "opacity-100 scale-100 translate-y-0"
+      : animationState === "minimizing"
+        ? "opacity-0 scale-75 translate-y-24"
+        : animationState === "closing"
+          ? "opacity-0 scale-95 translate-y-2"
+          : "opacity-0 scale-95 translate-y-4";
+
   return (
     <div
       ref={windowRef}
-      className={`absolute rounded-lg overflow-hidden shadow-2xl transition-shadow ${
+      className={`absolute rounded-lg overflow-hidden shadow-2xl transition-all duration-200 ease-out transform-gpu ${animationClass} ${
         isActive ? "shadow-2xl z-10" : "shadow-lg z-0"
       }`}
       style={{
@@ -253,6 +339,7 @@ export default function Window({
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
+        transformOrigin: "bottom center",
       }}
       onClick={onFocus}
     >
@@ -265,7 +352,7 @@ export default function Window({
             colorClass="bg-red-500 hover:bg-red-500"
             icon={<X className="h-2.5 w-2.5 stroke-[3]" />}
             iconClass="text-red-950"
-            onClick={onClose}
+            onClick={handleClose}
             label="Close window"
           />
 
@@ -299,7 +386,7 @@ export default function Window({
         {AppComponent ? (
           <AppComponent
             isDarkMode={isDarkMode}
-            onClose={onClose}
+            onClose={handleClose}
             onToggleDarkMode={onToggleDarkMode}
             brightness={brightness}
             onBrightnessChange={onBrightnessChange}

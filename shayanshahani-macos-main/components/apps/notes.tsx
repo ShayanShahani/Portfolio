@@ -15,7 +15,7 @@ export default function Notes({ isDarkMode = true }: NotesProps) {
     {
       id: 1,
       title: "About",
-      content: `# 👨🏻‍💻 Shayan Shahani
+      content: `# 🦹🏻‍♂️ Shayan Shahani
 
 I'm a Software Engineer based in Tehran, passionate about building clean, efficient, and impactful software solutions.
 
@@ -44,25 +44,21 @@ I enjoy turning ideas into products, solving complex problems, and continuously 
     {
       id: 2,
       title: "Interests",
-      content: `# 📚 Interests
+      content: `# 🥳 Interests
 
-🎮 Video games and interactive experiences
+🎮 Video games, boss fights, and losing sleep over "one last game"
 
-🎬 Movies, TV series, and great storytelling
+🎬 Movies, TV series, and stories that live rent-free in my head
 
-📖 Science fiction, fantasy, and technology books
+⚡ Chasing emerging tech, future trends, and shiny new gadgets
 
-⚡ Exploring emerging technologies and future trends
+🤖 Artificial Intelligence, Machine Learning, and automating things I’m too lazy to do myself
 
-🤖 Artificial Intelligence, Machine Learning, and automation
+🛸 Conspiracy theories about fictional universes and collecting useless but fascinating trivia
 
-🌍 Travel, culture, and learning from different perspectives
+🏀 Basketball, buzzer beaters, and convincing myself I could've made that shot.
 
-🏎️ Automotive technology and engineering
-
-🧘 Health, fitness, and building sustainable habits
-
-☕ Deep conversations, ambitious ideas, and lifelong learning
+☕ Powered by caffeine, curiosity, and conversations that start with "What if..."
 
 ## 🎯 Current Focus
 

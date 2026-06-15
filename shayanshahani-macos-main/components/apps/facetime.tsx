@@ -406,8 +406,8 @@ export default function FaceTime({
                   w-14 h-14 rounded-full bg-red-500 text-white
                   flex items-center justify-center hover:bg-red-600 transition
                 "
-                aria-label="Close FaceTime"
-                title="Close FaceTime"
+                aria-label="Hang Up"
+                title="Hang Up"
               >
                 <PhoneOff className="w-6 h-6" />
               </button>

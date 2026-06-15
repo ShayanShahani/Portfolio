@@ -12,12 +12,12 @@ export default function Photos({ isDarkMode = true }: PhotosProps) {
     {
       id: 1,
       src: "/photo-1.jpg",
-      title: "Photo 1",
+      title: "From Imagination to MVP",
     },
     {
       id: 2,
       src: "/photo-2.jpg",
-      title: "Photo 2",
+      title: "Inspired at Thrive",
     },
   ];
 

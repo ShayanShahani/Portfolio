@@ -161,7 +161,7 @@ export default function ControlCenter({
 
         <div className={`rounded-xl p-3 mb-3 ${cardClass}`}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">Display</span>
+            <span className="text-sm font-medium">Display Brightness</span>
             <span className="text-sm">{brightness}%</span>
           </div>
 

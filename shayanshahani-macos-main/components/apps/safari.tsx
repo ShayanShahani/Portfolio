@@ -39,7 +39,7 @@ const socialLinks: SafariLink[] = [
   },
   {
     title: "YouTube",
-    url: "https://www.youtube.com",
+    url: "https://www.youtube.com/@shayan.shahani",
     icon: "/youtube.png",
     description: "Videos, demos, and technical content",
   },

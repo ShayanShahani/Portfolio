@@ -18,7 +18,7 @@ export default function YouTube({ isDarkMode = true }: YouTubeProps) {
       hasOpenedRef.current = true;
 
       // Your YouTube channel URL
-      const youtubeUrl = "https://www.youtube.com/@ShayanShahani";
+      const youtubeUrl = "https://www.youtube.com/@shayan.shahani";
 
       // Open in new tab
       window.open(youtubeUrl, "_blank");

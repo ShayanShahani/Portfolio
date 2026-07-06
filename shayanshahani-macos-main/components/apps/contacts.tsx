@@ -35,8 +35,8 @@ const contacts: ContactItem[] = [
     emoji: "✉️",
     title: "Email",
     subtitle: "Professional contact",
-    value: "my.email@example.com",
-    href: "mailto:my.email@example.com",
+    value: "shayangeek@gmail.com",
+    href: "mailto:shayangeek@gmail.com",
     description:
       "Best for formal messages, collaboration requests, project details, and longer conversations.",
   },

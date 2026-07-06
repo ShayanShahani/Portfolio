@@ -424,7 +424,7 @@ export default function Terminal({ isDarkMode = true }: TerminalProps) {
           createLine("│ Contact │", "success"),
           createLine("└─────────┘", "success"),
           createLine(""),
-          createLine("Email: my@domainmail.com"),
+          createLine("Email: shayangeek@gmail.com"),
           createLine("GitHub: github.com/ShayanShahani"),
           createLine("LinkedIn: linkedin.com/in/shayanshahani/"),
           createLine("Telegram: @ShayanShahani"),

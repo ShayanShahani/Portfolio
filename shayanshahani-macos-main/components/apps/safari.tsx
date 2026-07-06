@@ -51,7 +51,7 @@ const socialLinks: SafariLink[] = [
   },
   {
     title: "Email",
-    url: "mailto:my@domainmmail.com",
+    url: "mailto:shayangeek@gmail.com",
     icon: "/mail.png",
     description: "Send me a direct message",
   },

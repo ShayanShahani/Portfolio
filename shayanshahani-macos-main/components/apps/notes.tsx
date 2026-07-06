@@ -38,7 +38,7 @@ I enjoy turning ideas into products, solving complex problems, and continuously 
 ## 📬 Connect
 
 - GitHub: [github.com/ShayanShahani](https://github.com/ShayanShahani)
-- Email: [my@domainmail.com](mailto:my@domainmail.com)`,
+- Email: [shayangeek@gmail.com](mailto:shayangeek@gmail.com)`,
       date: "Today, 11:45 AM",
     },
     {

@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   Github,
   Linkedin,
+  Mail,
   Menu,
   Moon,
   Star,
@@ -61,6 +62,10 @@ export default function MobilePortfolio({
   const goToPage = (page: MobilePage) => {
     setCurrentPage(page);
     setIsMenuOpen(false);
+  };
+
+  const sendEmail = () => {
+    window.location.href = "mailto:shayangeek@gmail.com";
   };
 
   return (
@@ -231,11 +236,8 @@ export default function MobilePortfolio({
               <Linkedin className="h-8 w-8" />
             </SocialButton>
 
-            <SocialButton
-              label="Twitter"
-              onClick={() => openLink("https://twitter.com/myTwitter")}
-            >
-              <TwitterIcon />
+            <SocialButton label="Email" onClick={sendEmail}>
+              <Mail className="h-8 w-8" />
             </SocialButton>
 
             <SocialButton
@@ -444,17 +446,5 @@ function SocialButton({
     >
       {children}
     </button>
-  );
-}
-
-function TwitterIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-8 w-8 fill-current"
-      aria-hidden="true"
-    >
-      <path d="M18.244 2H21.5l-7.11 8.13L22.75 22h-6.54l-5.12-6.68L5.23 22H1.97l7.6-8.69L1.55 2h6.7l4.63 6.12L18.244 2Zm-1.14 17.91h1.8L7.27 3.99H5.34l11.764 15.92Z" />
-    </svg>
   );
 }

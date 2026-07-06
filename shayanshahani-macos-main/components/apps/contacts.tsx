@@ -55,7 +55,7 @@ const contacts: ContactItem[] = [
     emoji: "💼",
     title: "LinkedIn",
     subtitle: "Professional profile",
-    value: "linkedin.com/in/shayanshahani",
+    value: "linkedin.com/in/shayan-shahani",
     href: "https://linkedin.com/in/shayan-shahani",
     description:
       "Connect with me professionally and view my work experience, skills, and career background.",

@@ -426,7 +426,7 @@ export default function Terminal({ isDarkMode = true }: TerminalProps) {
           createLine(""),
           createLine("Email: shayangeek@gmail.com"),
           createLine("GitHub: github.com/ShayanShahani"),
-          createLine("LinkedIn: linkedin.com/in/shayanshahani/"),
+          createLine("LinkedIn: linkedin.com/in/shayan-shahani/"),
           createLine("Telegram: @ShayanShahani"),
           createLine(""),
         );

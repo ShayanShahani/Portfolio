@@ -230,7 +230,7 @@ export default function MobilePortfolio({
             <SocialButton
               label="LinkedIn"
               onClick={() =>
-                openLink("https://www.linkedin.com/in/shayanshahani/")
+                openLink("https://www.linkedin.com/in/shayan-shahani/")
               }
             >
               <Linkedin className="h-8 w-8" />

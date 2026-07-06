@@ -56,7 +56,7 @@ const contacts: ContactItem[] = [
     title: "LinkedIn",
     subtitle: "Professional profile",
     value: "linkedin.com/in/shayanshahani",
-    href: "https://linkedin.com/in/shayanshahani",
+    href: "https://linkedin.com/in/shayan-shahani",
     description:
       "Connect with me professionally and view my work experience, skills, and career background.",
   },

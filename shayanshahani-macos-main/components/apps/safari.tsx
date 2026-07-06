@@ -45,7 +45,7 @@ const socialLinks: SafariLink[] = [
   },
   {
     title: "LinkedIn",
-    url: "https://www.linkedin.com/in/shayanshahani/",
+    url: "https://www.linkedin.com/in/shayan-shahani/",
     icon: "/linkedin.png",
     description: "Professional profile and work updates",
   },

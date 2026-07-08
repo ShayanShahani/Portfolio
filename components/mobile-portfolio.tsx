@@ -40,7 +40,7 @@ export default function MobilePortfolio({
     : "bg-[#f5efe6] text-zinc-950";
 
   const footerClass = isDarkMode
-    ? "bg-[#171d2a] text-white"
+    ? "bg-[#111827] text-white"
     : "bg-[#e7dccd] text-zinc-950";
 
   const menuClass = isDarkMode
@@ -70,9 +70,7 @@ export default function MobilePortfolio({
 
   return (
     <main
-      className={`flex flex-col ${pageClass} ${
-        isHomePage ? "h-svh overflow-hidden" : "min-h-screen overflow-x-hidden"
-      }`}
+      className={`mobile-portfolio-font flex min-h-svh flex-col overflow-x-hidden ${pageClass}`}
     >
       <style>
         {`
@@ -158,24 +156,34 @@ export default function MobilePortfolio({
             <div
               className={`mt-3 rounded-2xl border px-4 py-3 text-center shadow-xl ${menuClass}`}
             >
-              <MenuItem label="BLOG" onClick={() => goToPage("blog")} />
-              <MenuItem label="PROJECTS" onClick={() => goToPage("projects")} />
-              <MenuItem label="ABOUT" onClick={() => goToPage("about")} />
-              <MenuItem label="USES" onClick={() => goToPage("uses")} />
+              <MenuItem
+                label="BLOG"
+                active={currentPage === "blog"}
+                onClick={() => goToPage("blog")}
+              />
+              <MenuItem
+                label="PROJECTS"
+                active={currentPage === "projects"}
+                onClick={() => goToPage("projects")}
+              />
+              <MenuItem
+                label="ABOUT"
+                active={currentPage === "about"}
+                onClick={() => goToPage("about")}
+              />
+              <MenuItem
+                label="USES"
+                active={currentPage === "uses"}
+                onClick={() => goToPage("uses")}
+              />
             </div>
           )}
         </div>
       </header>
 
-      <section
-        className={
-          isHomePage
-            ? "min-h-0 flex-1 overflow-hidden"
-            : "flex-1 overflow-visible"
-        }
-      >
+      <section className="flex-1">
         {isHomePage ? (
-          <div className="flex h-full items-center justify-center px-5 text-center">
+          <div className="flex min-h-[calc(100svh-7rem)] items-center justify-center px-5 py-8 text-center">
             <div className="mx-auto max-w-2xl">
               <div className="mobile-image-in mx-auto mb-8 h-[min(54vw,17rem)] w-[min(54vw,17rem)] overflow-hidden rounded-full">
                 <img
@@ -188,7 +196,7 @@ export default function MobilePortfolio({
                 />
               </div>
 
-              <div className="mobile-text-in">
+              <div className="mobile-text-in mobile-home-text">
                 <p
                   className={`mx-auto max-w-xl text-[15px] font-medium leading-8 sm:text-lg ${mutedText}`}
                 >
@@ -215,16 +223,17 @@ export default function MobilePortfolio({
         )}
       </section>
 
-      <footer className={`shrink-0 text-center ${footerClass}`}>
-        <div className="px-5 py-5">
-          <h2 className="mb-4 text-xl font-semibold">You can find me at</h2>
-
-          <div className="flex items-center justify-center gap-6">
+      <footer className={`shrink-0 py-2 ${footerClass}`}>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-4 sm:px-6">
+          <div
+            className="flex items-center justify-center gap-4"
+            aria-label="Social links"
+          >
             <SocialButton
               label="GitHub"
               onClick={() => openLink("https://github.com/ShayanShahani")}
             >
-              <Github className="h-8 w-8" />
+              <Github className="h-5 w-5" />
             </SocialButton>
 
             <SocialButton
@@ -233,11 +242,11 @@ export default function MobilePortfolio({
                 openLink("https://www.linkedin.com/in/shayan-shahani/")
               }
             >
-              <Linkedin className="h-8 w-8" />
+              <Linkedin className="h-5 w-5" />
             </SocialButton>
 
             <SocialButton label="Email" onClick={sendEmail}>
-              <Mail className="h-8 w-8" />
+              <Mail className="h-5 w-5" />
             </SocialButton>
 
             <SocialButton
@@ -246,42 +255,46 @@ export default function MobilePortfolio({
                 openLink("https://www.youtube.com/@shayan.shahani")
               }
             >
-              <Youtube className="h-8 w-8" />
+              <Youtube className="h-5 w-5" />
             </SocialButton>
           </div>
-        </div>
 
-        {!isHomePage && (
-          <div
-            className={`border-t px-5 py-3 text-sm ${
-              isDarkMode ? "border-white/10" : "border-black/10"
-            } ${footerMutedText}`}
-          >
+          <div className={`text-sm ${footerMutedText} sm:ml-auto`}>
             Copyright © 2026{" "}
             <button
               type="button"
               onClick={() => goToPage("home")}
               className={`font-medium ${
                 isDarkMode
-                  ? "text-white hover:text-zinc-300"
+                  ? "text-zinc-100 hover:text-zinc-300"
                   : "text-zinc-950 hover:text-zinc-600"
               }`}
             >
               Shayan
             </button>
           </div>
-        )}
+        </div>
       </footer>
     </main>
   );
 }
 
-function MenuItem({ label, onClick }: { label: string; onClick: () => void }) {
+function MenuItem({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="block w-full rounded-xl px-3 py-3 text-sm font-semibold uppercase tracking-[0.25em] transition hover:bg-white/10"
+      className={`block w-full rounded-xl px-3 py-3 text-sm font-semibold uppercase tracking-[0.25em] transition ${
+        active ? "bg-white/10" : "hover:bg-white/10"
+      }`}
     >
       {label}
     </button>

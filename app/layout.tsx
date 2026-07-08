@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/react";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+});
 
 export const metadata: Metadata = {
   title: "Shayan Shahani",
   description:
-    "Personal portfolio of Shayan Shahani, showcasing web development projects and skills",
+    "Personal portfolio of Shayan Shahani, showcasing web development projects, skills, and software engineering experience.",
 };
 
 export default function RootLayout({
@@ -15,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children} <Analytics />
-      </body>
+      <body className={`${spaceGrotesk.variable} antialiased`}>{children}</body>
     </html>
   );
 }

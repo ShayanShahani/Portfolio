@@ -88,7 +88,7 @@ types/
 
 ## 🌐 Live Website
 
-**Portfolio:** Coming soon
+**Portfolio:** [shayanshahani.com](https://shayanshahani.com)
 
 ## 📝 License
 
